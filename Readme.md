@@ -3,7 +3,9 @@ Spring Boot AWS SQS JMS Example
 
 Introduction
 ------------
-The example Sends and Receives a String message using JMS to and from an AWS SQS Queue
+The example Sends and Receives a String message using JMS to and from an AWS SQS Queue.
+
+WARNING: This only works locally - when uploaded to AWS it does not Work, an Access Denied problem occurs.
 
 Configuration
 -------------
