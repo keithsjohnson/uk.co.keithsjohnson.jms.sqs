@@ -5,7 +5,7 @@ Introduction
 ------------
 The example Sends and Receives a String message using JMS to and from an AWS SQS Queue.
 
-WARNING: This only works locally - when uploaded to AWS it does not Work, an Access Denied problem occurs.
+This OK works both locally and when uploaded to AWS.
 
 Configuration
 -------------
@@ -24,11 +24,5 @@ http://localhost:8080/send?message=Hi Everyone
 
 JMS 
 ---
-The project use a local build of skyscreamer nevado-jms that can be found at the following GitHub URL:
-https://github.com/skyscreamer/nevado
-
-The skyscreamer nevado-jms has been forked at the following site where it has been enhanced to use additional AWS Credentials options than just the Basic AWS Credentials:
-https://github.com/keithsjohnson/nevado 
-
-Currently the version at https://github.com/keithsjohnson/nevado needs to be build locally and then included in this project.
-(This changed version still needs to be committed and merged).
+Updated to use the process described in the following blog:
+https://java.awsblog.com/post/Tx282Y6YU7OP4AB/Using-Amazon-SQS-with-Spring-Boot-and-Spring-JMS

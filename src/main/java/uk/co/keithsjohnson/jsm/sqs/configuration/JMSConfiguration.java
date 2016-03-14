@@ -1,78 +1,41 @@
 package uk.co.keithsjohnson.jsm.sqs.configuration;
 
-import javax.jms.ConnectionFactory;
-import javax.jms.Queue;
+import javax.jms.Session;
 
-import org.skyscreamer.nevado.jms.NevadoConnectionFactory;
-import org.skyscreamer.nevado.jms.connector.amazonaws.AmazonAwsSQSConnectorFactory;
-import org.skyscreamer.nevado.jms.destination.NevadoQueue;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
-import org.springframework.jms.listener.SimpleMessageListenerContainer;
-import org.springframework.jms.listener.adapter.MessageListenerAdapter;
+import org.springframework.jms.support.destination.DynamicDestinationResolver;
 
-import com.amazonaws.auth.AWSCredentialsProvider;
-
-import uk.co.keithsjohnson.jsm.sqs.service.MessageReceiver;
+import com.amazon.sqs.javamessaging.SQSConnectionFactory;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
 
 @Configuration
 public class JMSConfiguration {
 
 	public static final String POSTCODE_LOCATION_FINDER_QUEUE = "PostcodeLocationFinderQueue";
 
-	@Autowired
-	private MessageReceiver messageReceiver;
-
-	@Autowired
-	private AWSCredentialsProvider awsCredentialsProvider;
+	SQSConnectionFactory connectionFactory = SQSConnectionFactory.builder()
+			.withRegion(Region.getRegion(Regions.EU_WEST_1))
+			.withAWSCredentialsProvider(new DefaultAWSCredentialsProviderChain())
+			.build();
 
 	@Bean
-	public AmazonAwsSQSConnectorFactory sqsConnectionFactory() {
-		return new AmazonAwsSQSConnectorFactory();
+	public DefaultJmsListenerContainerFactory jmsListenerContainerFactory() {
+		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+		factory.setConnectionFactory(this.connectionFactory);
+		factory.setDestinationResolver(new DynamicDestinationResolver());
+		factory.setConcurrency("3-10");
+		factory.setSessionAcknowledgeMode(Session.CLIENT_ACKNOWLEDGE);
+		return factory;
 	}
 
 	@Bean
-	public ConnectionFactory connectionFactory() {
-		NevadoConnectionFactory nevadoConnectionFactory = new NevadoConnectionFactory();
-		nevadoConnectionFactory.setSqsConnectorFactory(sqsConnectionFactory());
-		nevadoConnectionFactory.setAwsCredentials(awsCredentialsProvider.getCredentials());
-		nevadoConnectionFactory.setAwsSQSEndpoint("http://sqs.eu-west-1.amazonaws.com");
-		return nevadoConnectionFactory;
-	}
-
-	@Bean
-	public Queue queue() {
-		Queue queue = new NevadoQueue(POSTCODE_LOCATION_FINDER_QUEUE);
-		return queue;
-	}
-
-	@Bean
-	public JmsTemplate jmsTemplate() {
-		JmsTemplate jmsTemplate = new JmsTemplate();
-		jmsTemplate.setDefaultDestinationName(POSTCODE_LOCATION_FINDER_QUEUE);
-		jmsTemplate.setConnectionFactory(connectionFactory());
-		return jmsTemplate;
-	}
-
-	@Bean
-	public MessageListenerAdapter messageListener() {
-		MessageListenerAdapter messageListenerAdapter = new MessageListenerAdapter();
-		messageListenerAdapter.setDelegate(messageReceiver);
-		messageListenerAdapter.setDefaultListenerMethod("processMessage");
-		messageListenerAdapter.setDefaultResponseDestination(queue());
-		return messageListenerAdapter;
-	}
-
-	@Bean
-	public SimpleMessageListenerContainer simpleMessageListenerContainer() {
-		SimpleMessageListenerContainer simpleMessageListenerContainer = new SimpleMessageListenerContainer();
-		simpleMessageListenerContainer.setConnectionFactory(connectionFactory());
-		simpleMessageListenerContainer.setMessageListener(messageListener());
-		simpleMessageListenerContainer.setDestination(queue());
-
-		return simpleMessageListenerContainer;
+	public JmsTemplate defaultJmsTemplate() {
+		return new JmsTemplate(this.connectionFactory);
 	}
 
 }
