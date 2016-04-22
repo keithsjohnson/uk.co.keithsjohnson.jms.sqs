@@ -55,6 +55,8 @@ task copyTask(type: Copy) {
    	include '*.jar'
    	include 'Dockerfile'
    	include 'Dockerrun.aws.json'
+   	include '.ebignore'
+   	include 'eb-create-and-deploy.cmd'
    	into 'build/docker'
 }
 

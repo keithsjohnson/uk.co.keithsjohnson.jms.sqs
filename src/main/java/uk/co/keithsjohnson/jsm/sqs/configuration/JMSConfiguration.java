@@ -16,8 +16,6 @@ import com.amazonaws.regions.Regions;
 @Configuration
 public class JMSConfiguration {
 
-	public static final String POSTCODE_LOCATION_FINDER_QUEUE = "PostcodeLocationFinderQueue";
-
 	SQSConnectionFactory connectionFactory = SQSConnectionFactory.builder()
 			.withRegion(Region.getRegion(Regions.EU_WEST_1))
 			.withAWSCredentialsProvider(new DefaultAWSCredentialsProviderChain())
@@ -37,5 +35,4 @@ public class JMSConfiguration {
 	public JmsTemplate defaultJmsTemplate() {
 		return new JmsTemplate(this.connectionFactory);
 	}
-
 }

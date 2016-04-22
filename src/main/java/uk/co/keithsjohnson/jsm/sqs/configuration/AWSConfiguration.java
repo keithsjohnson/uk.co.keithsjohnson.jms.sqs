@@ -30,14 +30,6 @@ public class AWSConfiguration {
 
 	@Bean
 	public Region amazonRegion() {
-		System.out.println("KJ Found amazonRegion=" + amazonRegion);
-		if ("eu-west-1".equalsIgnoreCase(amazonRegion)) {
-			System.out.println("KJ Found OK amazonRegion=" + amazonRegion);
-			return Region.getRegion(Regions.fromName(amazonRegion));
-		} else {
-			System.out.println("KJ Found HARDCODED eu-west-1");
-			return Region.getRegion(Regions.fromName("eu-west-1"));
-		}
+		return Region.getRegion(Regions.fromName(amazonRegion));
 	}
-
 }

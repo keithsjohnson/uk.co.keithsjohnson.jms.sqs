@@ -5,14 +5,16 @@ import javax.jms.Message;
 import javax.jms.Session;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Component;
 
-import uk.co.keithsjohnson.jsm.sqs.configuration.JMSConfiguration;
-
 @Component
 public class MessageSender {
+
+	@Value("${aws.sqs.destination:PostcodeLocationFinderQueue}")
+	private String sqsDestination;
 
 	@Autowired
 	private JmsTemplate jmsTemplate;
@@ -28,7 +30,7 @@ public class MessageSender {
 		};
 
 		System.out.println("Send message.");
-		jmsTemplate.send(JMSConfiguration.POSTCODE_LOCATION_FINDER_QUEUE, messageCreator);
+		jmsTemplate.send(sqsDestination, messageCreator);
 		System.out.println("Sent message.");
 	}
 }
