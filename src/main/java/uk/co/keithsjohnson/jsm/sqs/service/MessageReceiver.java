@@ -4,14 +4,14 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.JmsListenerConfigurer;
 import org.springframework.jms.config.JmsListenerEndpointRegistrar;
 import org.springframework.jms.config.SimpleJmsListenerEndpoint;
+import org.springframework.stereotype.Component;
 
 import com.amazon.sqs.javamessaging.message.SQSTextMessage;
 
-@Configuration
+@Component
 public class MessageReceiver implements JmsListenerConfigurer {
 
 	@Value("${aws.sqs.destination}")

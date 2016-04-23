@@ -20,16 +20,15 @@ public class MessageSender {
 	private JmsTemplate jmsTemplate;
 
 	public void send(String message) {
-		// Send a message
 		MessageCreator messageCreator = new MessageCreator() {
-			// @Override
+			@Override
 			public Message createMessage(Session session) throws JMSException {
 				System.out.println("Create message: " + message);
 				return session.createTextMessage(message);
 			}
 		};
 
-		System.out.println("Send message.");
+		System.out.println("Send message: " + messageCreator.toString());
 		jmsTemplate.send(sqsDestination, messageCreator);
 		System.out.println("Sent message.");
 	}

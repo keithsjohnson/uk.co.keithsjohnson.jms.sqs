@@ -7,17 +7,12 @@ import org.springframework.context.annotation.Configuration;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
 
 @Configuration
 public class AWSConfiguration {
 
 	@Value("${use.profile.credentials:false}")
 	private boolean useProfileCredentials = false;
-
-	@Value("${amazon.region:eu-west-1}")
-	private String amazonRegion;
 
 	@Bean
 	public AWSCredentialsProvider amazonAWSCredentialsProvider() {
@@ -26,10 +21,5 @@ public class AWSConfiguration {
 		} else {
 			return new InstanceProfileCredentialsProvider();
 		}
-	}
-
-	@Bean
-	public Region amazonRegion() {
-		return Region.getRegion(Regions.fromName(amazonRegion));
 	}
 }
