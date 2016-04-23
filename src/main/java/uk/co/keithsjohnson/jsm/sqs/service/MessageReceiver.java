@@ -14,7 +14,7 @@ import com.amazon.sqs.javamessaging.message.SQSTextMessage;
 @Configuration
 public class MessageReceiver implements JmsListenerConfigurer {
 
-	@Value("${aws.sqs.destination:PostcodeLocationFinderQueue}")
+	@Value("${aws.sqs.destination}")
 	private String sqsDestination;
 
 	@Override

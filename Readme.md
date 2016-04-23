@@ -17,8 +17,11 @@ When running in AWS leave off the JVM arg because it defaults to false and will 
 The Amazon Region defaults to eu-west-1 - if you require a different region then add the following JVM arg:
 -Damazon.region=<region string e.g. eu-west-1>
 
-The AWS Destination is configured using the following JVM Arg:
+The AWS SQS Destination is configured using the following JVM Arg:
 -Daws.sqs.destination=PostcodeLocationFinderQueue
+
+Running locally use the following JVM Args: 
+-Duse.profile.credentials=true -Dserver.port=8080 -Daws.sqs.destination=PostcodeLocationFinderQueue
 
 Using
 -----
@@ -35,3 +38,8 @@ https://java.awsblog.com/post/Tx282Y6YU7OP4AB/Using-Amazon-SQS-with-Spring-Boot-
 Build
 -----
 gradle clean build buildDockerZip
+
+Deploy
+------
+cd build/docker
+eb-create-and-deploy.cmd

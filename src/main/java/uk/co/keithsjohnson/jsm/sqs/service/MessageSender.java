@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessageSender {
 
-	@Value("${aws.sqs.destination:PostcodeLocationFinderQueue}")
+	@Value("${aws.sqs.destination}")
 	private String sqsDestination;
 
 	@Autowired

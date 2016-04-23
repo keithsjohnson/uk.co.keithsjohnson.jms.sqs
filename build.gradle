@@ -36,7 +36,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.springframework.boot:spring-boot-starter-web")
 	compile("org.springframework:spring-jms")
-	compile("com.amazonaws:aws-java-sdk:1.9.6")
+	compile("com.amazonaws:aws-java-sdk:1.10.72")
 	compile("com.amazonaws:amazon-sqs-java-messaging-lib:1.0.0")	
         
     testCompile("org.springframework.boot:spring-boot-starter-test")
