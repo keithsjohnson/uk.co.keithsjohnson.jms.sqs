@@ -23,6 +23,7 @@ public class MessageReceiver implements JmsListenerConfigurer {
 		endpoint.setId("myJmsEndpoint");
 		endpoint.setDestination(sqsDestination);
 		endpoint.setMessageListener(messageListener);
+		// endpoint.setSelector("JMSCorrelationID = '1'");
 		registrar.registerEndpoint(endpoint);
 	}
 
@@ -31,7 +32,9 @@ public class MessageReceiver implements JmsListenerConfigurer {
 		public void onMessage(Message message) {
 			SQSTextMessage st = (SQSTextMessage) message;
 			try {
-				System.out.println("Received message: " + st.getText());
+				System.out.println(
+						"Received message: " + st.getText() + ", JMSCorrelationID=" + st.getJMSCorrelationID()
+								+ ", UUID=" + st.getStringProperty("UUID"));
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
